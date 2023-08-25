@@ -6,11 +6,11 @@ namespace AuthenticationAPI.test
 {
     public class DatabaseContextTest
     {
-        public DbContext context = new UserContext();
+        public DbContext context = new BaseContext();
         [Fact]
         public void GetUserById()
         {
-            DbSet<User> users = ((UserContext)context).User;
+            DbSet<User> users = ((BaseContext)context).Users;
 
             Assert.NotNull(users);
             Assert.NotNull(context);

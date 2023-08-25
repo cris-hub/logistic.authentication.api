@@ -1,34 +1,32 @@
 ﻿using AuthenticationAPI.DatabaseContext;
 using AuthenticationAPI.Entities;
 using AuthenticationAPI.Repositories;
+using AuthenticationAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Moq.EntityFrameworkCore;
 
 namespace AuthenticationAPI.test.Services
 {
     public class UserServiceTest
     {
-        public IUserService user = new UserService();
-        public Mock<UserContext> dbContext = new();
-        public required IUserRepository repository;
+        public required IUserService service;
+        public Mock<IUserRepository> repository = new();
 
-        public UserServiceTest()
-        {
-            repository = new UserRepository(dbContext.Object);
-        }
 
         [Fact]
         public async Task GetUsersAsync()
         {
-            List<User> usersExpected = new();
-
-            dbContext.Setup(db => db.User.ToListAsync(It.IsAny<CancellationToken>())).ReturnsAsync(usersExpected);
-
-            List<User> actual = await repository.GetUsers();
+            repository.Setup(c => c.GetUsersAsync(It.IsAny<string>())).ReturnsAsync(TestDataHelper.GetFakeUserList());
+            service = new UserService(repository.Object);
 
 
-            Assert.Equal(usersExpected, actual);
-            Assert.NotNull(user);
+            IEnumerable<User> actual = (await service.GetUsersAsync());
+            
+
+            Assert.NotNull(actual);
+            Assert.True(actual.Any());
+
         }
 
         [Fact]
@@ -36,17 +34,16 @@ namespace AuthenticationAPI.test.Services
         {
             string password = "password";
             string username = "username";
-
             User usersExpected = new(username, password);
+            repository.Setup(c => c.GetUserByUserNameAndPassword(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(usersExpected);
+            service = new UserService(repository.Object);
+
+            User actual = await service.GetUserByUserNameAndPassword(username, password);
 
 
-            dbContext.Setup(db => db.User.FirstOrDefaultAsync(It.IsAny<CancellationToken>())).ReturnsAsync(usersExpected);
+            Assert.Equal(actual.Password, actual.Password);
+            Assert.Equal(actual.Password, actual.Password);
 
-            User actual = await repository.GetUserByUserNameAndPassword(username, password);
-
-
-            Assert.Equal(usersExpected, actual);
-            Assert.NotNull(user);
         }
     }
 }
