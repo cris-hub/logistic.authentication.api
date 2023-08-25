@@ -8,12 +8,10 @@ namespace AuthenticationAPI.test.Entities
         [Fact]
         public void Instantiation()
         {
-            User user = new(username: "test", password: "test");
+            User user = new("test", "test");
 
-            Assert.NotNull(user.Username);
             Assert.Equal("test", user.Username);
 
-            Assert.NotNull(user.Password);
             Assert.Equal("test", user.Password);
         }
 
