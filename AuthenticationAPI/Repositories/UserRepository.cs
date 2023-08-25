@@ -1,25 +1,39 @@
 ﻿using AuthenticationAPI.DatabaseContext;
 using AuthenticationAPI.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthenticationAPI.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserContext context;
+        private readonly IDbContextFactory context;
 
-        public UserRepository(UserContext context)
+        public UserRepository(IDbContextFactory context)
         {
             this.context = context;
         }
 
-        public Task<User> GetUserByUserNameAndPassword(string username, string password)
+
+        public async Task<User> CreateUserAsync(User user, string contextName)
         {
-            throw new NotImplementedException();
+            BaseContext db = context.GetContext(contextName);
+            var userCreate = await db.AddAsync<User>(user);
+            await db.SaveChangesAsync();
+            return userCreate.Entity;
         }
 
-        public Task<List<User>> GetUsers()
+        public Task<User> GetUserByUserNameAndPasswordAsync(string username, string password, string contextName)
         {
-            throw new NotImplementedException();
+            BaseContext db = context.GetContext(contextName);
+            return db.Users.FirstOrDefaultAsync(c => c.Username == username && c.Password == password);
+
+        }
+
+        public Task<List<User>> GetUsersAsync(string contextName)
+        {
+            BaseContext db = context.GetContext(contextName);
+            return db.Users.ToListAsync();
+
         }
     }
 }
