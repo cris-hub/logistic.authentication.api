@@ -1,7 +1,7 @@
 ﻿namespace AuthenticationAPI.DatabaseContext
 {
 
-    public class DbContextFactory
+    public class DbContextFactory : IDbContextFactory
     {
         private readonly IDictionary<string, BaseContext> _context;
 

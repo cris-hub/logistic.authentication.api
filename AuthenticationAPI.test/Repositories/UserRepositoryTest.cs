@@ -13,7 +13,7 @@ namespace AuthenticationAPI.test.Repositories
         private const string table = "users";
         public required IUserService service;
         public required IUserRepository repository;
-        public Mock<DbContextFactory> factory = new Mock<DbContextFactory>();
+        public Mock<IDbContextFactory> factory = new Mock<IDbContextFactory>();
         public Mock<BaseContext> basecontext = new Mock<BaseContext>();
 
 
@@ -48,7 +48,7 @@ namespace AuthenticationAPI.test.Repositories
 
             repository = new UserRepository(factory.Object);
 
-            User actual = await repository.GetUserByUserNameAndPassword(username, password, table);
+            User actual = await repository.GetUserByUserNameAndPasswordAsync(username, password, table);
 
 
 

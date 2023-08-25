@@ -1,7 +1,7 @@
 ﻿using AuthenticationAPI.Entities;
 using AuthenticationAPI.Models;
 using AuthenticationAPI.Repositories;
-using AuthenticationAPI.test.Controllers;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,10 +12,14 @@ namespace AuthenticationAPI.Services
     public class UserService : IUserService
     {
         private IUserRepository repository;
-        private string Table = "users";
+        private string Table = "LogisticAuthenticationContext";
 
         private readonly AppSettings _appSettings;
-        public UserService(IUserRepository repository) => this.repository = repository;
+        public UserService(IUserRepository repository, IOptions<AppSettings> appSettings)
+        {
+            this.repository = repository;
+            _appSettings = appSettings.Value;
+        }
 
         public async Task<AuthenticateResponse> AuthenticationAsync(AuthenticateRequest request)
         {
@@ -43,13 +47,26 @@ namespace AuthenticationAPI.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public Task<User> GetUserByUserNameAndPassword(string username, string password) => repository.GetUserByUserNameAndPassword(username, password, Table);
+        public Task<User> GetUserByUserNameAndPassword(string username, string password) => repository.GetUserByUserNameAndPasswordAsync(username, password, Table);
 
         public Task<List<User>> GetUsersAsync() => repository.GetUsersAsync(Table);
 
         public Task<User> GetById(int userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<UserCreateResponse> CreateUser(UserCreateRequest request)
+        {
+            User user = new(request.Username, request.Password);
+
+            user = await repository.CreateUserAsync(user, Table);
+
+            UserCreateResponse response = new() { 
+            Id = user
+            };
+
+            return response;
         }
     }
 }

@@ -6,14 +6,23 @@ namespace AuthenticationAPI.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DbContextFactory context;
+        private readonly IDbContextFactory context;
 
-        public UserRepository(DbContextFactory context)
+        public UserRepository(IDbContextFactory context)
         {
             this.context = context;
         }
 
-        public Task<User> GetUserByUserNameAndPassword(string username, string password, string contextName)
+
+        public async Task<User> CreateUserAsync(User user, string contextName)
+        {
+            BaseContext db = context.GetContext(contextName);
+            var userCreate = await db.AddAsync<User>(user);
+            await db.SaveChangesAsync();
+            return userCreate.Entity;
+        }
+
+        public Task<User> GetUserByUserNameAndPasswordAsync(string username, string password, string contextName)
         {
             BaseContext db = context.GetContext(contextName);
             return db.Users.FirstOrDefaultAsync(c => c.Username == username && c.Password == password);

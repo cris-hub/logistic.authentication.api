@@ -12,7 +12,7 @@ namespace AuthenticationAPI.Migrations
 {
     [DbContext(typeof(LogisticAuthenticationContext))]
     [Migration("20230825025118_init")]
-    partial class init
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

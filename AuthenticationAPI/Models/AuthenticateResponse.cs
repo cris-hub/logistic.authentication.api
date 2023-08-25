@@ -1,11 +1,11 @@
 ﻿using AuthenticationAPI.Entities;
 
-namespace AuthenticationAPI.test.Controllers
+namespace AuthenticationAPI.Models
 {
     public class AuthenticateResponse
     {
-        private string username;
-        private User user;
+        private readonly string username;
+        private readonly User user;
 
         public AuthenticateResponse(string username) => this.username = username;
 

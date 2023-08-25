@@ -19,7 +19,7 @@ namespace AuthenticationAPI
 
 
             builder.RegisterType<LogisticAuthenticationContext>().As<BaseContext>();
-            builder.Register(ctx =>
+            builder.Register<IDbContextFactory>(ctx =>
             {
                 var allContext = new Dictionary<string, BaseContext>
                 {
