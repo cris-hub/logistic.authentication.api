@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Microsoft.EntityFrameworkCore;
 using AuthenticationAPI;
-using AuthenticationAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
