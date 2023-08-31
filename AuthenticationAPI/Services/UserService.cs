@@ -58,12 +58,24 @@ namespace AuthenticationAPI.Services
 
         public async Task<UserCreateResponse> CreateUser(UserCreateRequest request)
         {
-            User user = new(request.Username, request.Password);
+            User user = new(request.Username, request.Password)
+            {
+                Address = request.Address,
+                City = request.City,
+                DocumentId = request.DocumentId,
+                Email = request.Email,
+                Country = request.Country,
+                Name = request.Name,
+                Password = request.Password,
+                Phone = request.Phone,
+                Username = request.Username
+            };
 
             user = await repository.CreateUserAsync(user, Table);
 
-            UserCreateResponse response = new() { 
-            Id = user
+            UserCreateResponse response = new()
+            {
+                Id = user.Id
             };
 
             return response;
