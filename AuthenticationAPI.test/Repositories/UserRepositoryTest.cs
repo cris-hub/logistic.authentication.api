@@ -1,7 +1,6 @@
 ﻿using AuthenticationAPI.DatabaseContext;
 using AuthenticationAPI.Entities;
 using AuthenticationAPI.Repositories;
-using AuthenticationAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -11,7 +10,6 @@ namespace AuthenticationAPI.test.Repositories
     public class UserRepositoryTest
     {
         private const string table = "users";
-        public required IUserService service;
         public required IUserRepository repository;
         public Mock<IDbContextFactory> factory = new Mock<IDbContextFactory>();
         public Mock<BaseContext> basecontext = new Mock<BaseContext>();

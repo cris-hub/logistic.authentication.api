@@ -4,17 +4,18 @@ namespace AuthenticationAPI.Models
 {
     public class AuthenticateResponse
     {
-        private readonly string username;
-        private readonly User user;
+        public string Username { get; }
+        public User User { get; }
+        public string Token { get; }
 
-        public AuthenticateResponse(string username) => this.username = username;
+        public AuthenticateResponse(string username) => this.Username = username;
 
         public AuthenticateResponse(User user, string token)
         {
-            this.user = user;
+            this.User = user;
+            this.Username = user.Username;
             Token = token;
         }
 
-        public string Token { get; set; }
     }
 }

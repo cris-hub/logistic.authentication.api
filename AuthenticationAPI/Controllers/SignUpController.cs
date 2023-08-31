@@ -21,7 +21,7 @@ namespace AuthenticationAPI.Controllers
         {
             UserCreateResponse response = await @object.CreateUser(u);
             if (response == null)
-                return BadRequest("User not found");
+                return BadRequest("User not register");
             return Ok(response);
         }
     }
